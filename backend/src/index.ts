@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import router from './routes/index.js';
+import router from './routes/index';
 
 const app = express();
 

@@ -1,5 +1,5 @@
 // src/types/express.d.ts
-import { IUserToken } from '../interfaces/user.interface'; // Adjust the import path if necessary
+import { IUserToken } from '../interfaces/user.interface'; 
 
 declare global {
   namespace Express {

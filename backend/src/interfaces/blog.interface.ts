@@ -1,9 +1,9 @@
-import { IUser } from '../models/user.model';
+import mongoose from 'mongoose';
 
 export interface BlogCreate {
   title: string;
   content: string;
-  author: IUser['_id'];
+  author: mongoose.Types.ObjectId;
 }
 
 export interface BlogUpdate {

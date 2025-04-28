@@ -2,6 +2,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 import { UserRoles } from '../interfaces/user.interface';
 
 export interface IUser extends Document {
+  _id: string;
   name: string;
   email: string;
   password: string;

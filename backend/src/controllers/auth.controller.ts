@@ -1,8 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import { generateToken } from '../config/jwt';
 import { validatePassword, createUser } from '../services/user.service';
-import { loginSchema, RegisterInput } from '../schemas/user.schema';
+import { loginSchema, registerSchema } from '../schemas/user.schema';
 import { UserRoles } from '../interfaces/user.interface';
+import userModel, { IUser } from '../models/user.model';
+
+/// <reference path="../types/express.d.ts" />
+
 
 // Register route handler
 export const register = async (
@@ -11,7 +15,8 @@ export const register = async (
   next: NextFunction
 ): Promise<any> => {
   try {
-    const user = await createUser(req.body);
+    const { email, password, name , role } = registerSchema.parse(req.body);
+    const user:any = await createUser(req.body);
     const token = generateToken({ id: user._id.toString(), role: user.role as UserRoles });
     res.status(201).json({ token });
   } catch (error: any) {
@@ -29,7 +34,7 @@ export const login = async (
 ): Promise<any> => {
   try {
     const { email, password } = loginSchema.parse(req.body);
-    const user = await validatePassword(email, password);
+    const user:any = await validatePassword(email, password);
 
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
@@ -44,5 +49,7 @@ export const login = async (
 
 // Get current user route handler
 export const getMe = async (req: Request, res: Response): Promise<any> => {
-  res.json(req.user); // No need to return anything explicitly, just send the response.
+
+  const user = await userModel.findById(req.user!.id).select('-password');
+  res.json({user}); 
 };

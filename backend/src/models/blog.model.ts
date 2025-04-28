@@ -2,9 +2,10 @@ import mongoose, { Document, Schema } from 'mongoose';
 import { IUser } from './user.model';
 
 export interface IBlog extends Document {
+  _id: string;
   title: string;
   content: string;
-  author: IUser['_id'];
+  author: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
