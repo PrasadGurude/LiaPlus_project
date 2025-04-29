@@ -10,12 +10,17 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 
-app.use('/api', router);
+// Add request logging
+app.use((req: Request, res: Response, next: NextFunction) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
 
+app.use('/api', router);
 
 // Error handling middleware
 app.use((err:Error, req:Request, res:Response, next:NextFunction) => {
-  console.error(err.stack);
+  console.error('Error:', err.stack);
   res.status(500).json({ message: 'Internal Server Error' });
 });
 

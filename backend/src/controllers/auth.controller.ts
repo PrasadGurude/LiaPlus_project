@@ -15,10 +15,10 @@ export const register = async (
   next: NextFunction
 ): Promise<any> => {
   try {
-    const { email, password, name , role } = registerSchema.parse(req.body);
-    const user:any = await createUser(req.body);
+    const { email, password, name, role } = registerSchema.parse(req.body);
+    const user: any = await createUser(req.body);
     const token = generateToken({ id: user._id.toString(), role: user.role as UserRoles });
-    res.status(201).json({ token });
+    res.status(201).json({ token, user: { ...user, password: undefined } });
   } catch (error: any) {
     if (error.code === 11000) {
       return res.status(400).json({ message: 'Email already exists' });
@@ -34,7 +34,7 @@ export const login = async (
 ): Promise<any> => {
   try {
     const { email, password } = loginSchema.parse(req.body);
-    const user:any = await validatePassword(email, password);
+    const user: any = await validatePassword(email, password);
 
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
@@ -51,5 +51,5 @@ export const login = async (
 export const getMe = async (req: Request, res: Response): Promise<any> => {
 
   const user = await userModel.findById(req.user!.id).select('-password');
-  res.json({user}); 
+  res.json({ user });
 };
